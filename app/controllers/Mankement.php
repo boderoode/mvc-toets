@@ -19,8 +19,8 @@ class Mankement extends Controller {
 
         $data=[ 
             'title' => "Overzicht Mankementen",
-            'Email' => "bo_deroode@outlook.com",
-            'Kenteken'=> "TH-78-KL --- Ferrari",
+            'Email' => "manhoi@gmail.com",
+            'Kenteken'=> "90-KL-TR Fiat 500",
             'AutoId' => $AutoId,
             'rows' => $rows
         ];
@@ -30,7 +30,7 @@ class Mankement extends Controller {
     {
         $data = [
             'title' => 'Invoeren Mankement',
-            'Kenteken' => "TH-78-KL --- Ferari" ,
+            'Kenteken' => "90-KL-TR Fiat 500 " ,
             'AutoId' => $AutoId,
             'MankementError' => ''
         ];
@@ -38,7 +38,7 @@ class Mankement extends Controller {
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
            $data = [ 
                 'title' => 'Invoeren Mankement',
-                'Kenteken' => "TH-78-KL --- Ferari" ,
+                'Kenteken' => "90-KL-TR Fiat 500 " ,
                 'AutoId' => $_POST['AutoId'],
                 'Mankement' => $_POST['Mankement'],
                 'MankementError' => ''

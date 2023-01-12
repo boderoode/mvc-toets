@@ -1,4 +1,4 @@
-<?php require(APPROOT . '/views/includes/header.php'); ?>
+
 <h2><?= $data['title']; ?></h2>
 
 <h4><?=  $data['Kenteken']; ?></h4>
@@ -16,4 +16,4 @@
     
     <input type="submit" value="Voer In">
 </form>
-<?php require(APPROOT . '/views/includes/footer.php'); ?>
+
