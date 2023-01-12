@@ -1,86 +1,80 @@
 <?php
 
 /**
- * Dit is de database class die alle communicatie met de database verzorgt.
+ * Dit is de database class.
  */
+
 class Database
 {
-    // Properties
     private $dbHost = DB_HOST;
     private $dbUser = DB_USER;
     private $dbPass = DB_PASS;
     private $dbName = DB_NAME;
     private $dbHandler;
-    private $statement;
 
-
-    // Dit is de constructor van de Database class. We maken verbinding met de MySQL server
     public function __construct()
     {
-        $conn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName;
-        // echo $conn;exit();
+        $conn = "mysql:host=$this->dbHost;dbname=$this->dbName";
+
         $options = array(
             PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_EMULATE_PREPARES => false
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         );
 
-
         try {
-            //We maken een verbinding met de PDO server door een nieuw PDO object te maken
             $this->dbHandler = new PDO($conn, $this->dbUser, $this->dbPass, $options);
-
-        } catch(PDOException $e) {
-            //var_dump($e);
+        } catch (PDOException $e) {
             //echo $e->getMessage();
-            echo '<p style="color:red">Er is een database error opgetreden</p>';
-        }        
+            echo "Er zij problemen met de database. Probeer het later nog eens<br>";
+        }
     }
 
-    public function query($sql) 
+    public function query($sql)
     {
         $this->statement = $this->dbHandler->prepare($sql);
     }
 
-    public function bind($parameter, $value, $type = null) 
+    public function bind($parameter, $value, $type=null)
     {
-        if (is_null($type)) {
-            switch ($value) {
+        // Als $type = null dan zoekt de switch case zelf uit
+        // wat het gegevenstype is van de $value;
+        if(is_null($type)){
+            switch($value) {
                 case is_int($value):
-                    $type = PDO::PARAM_INT;
-                    break;
+                     $type = PDO::PARAM_INT;
+                break;
                 case is_bool($value):
                     $type = PDO::PARAM_BOOL;
-                    break;
-                case is_string($value):
-                    $type = PDO::PARAM_STR;
-                    break;
-                case is_null($value):
+                break;
+                case is_null($type):
                     $type = PDO::PARAM_NULL;
-                    break;
+                break;
                 default:
                     $type = PDO::PARAM_STR;
-            }
+                }
         }
         $this->statement->bindValue($parameter, $value, $type);
     }
 
-    public function execute() 
+    public function execute()
     {
         return $this->statement->execute();
     }
 
-    // Deze method geeft een array van objecten terug. Elk object is een record uit de database
     public function resultSet()
     {
         $this->execute();
         return $this->statement->fetchAll(PDO::FETCH_OBJ);
     }
 
-    
-    public function single() 
+    public function single()
     {
         $this->execute();
         return $this->statement->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function rowCount()
+    {
+        $this->statement->rowCount();
     }
 }

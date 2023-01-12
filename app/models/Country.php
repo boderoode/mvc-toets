@@ -1,79 +1,73 @@
 <?php
 
 /**
- * Dit is de model voor de controller Countries
+ * Dit is de model country die hoort bij de Countries controller
  */
 
 class Country
 {
-    //properties
-    private $db;
+   private $db;
+   public function __construct()
+   {
+      $this->db = new Database();
+   }
 
-    // Dit is de constructor van de Country model class
-    public function __construct()
-    {
-        $this->db = new Database();
-    }
+   public function getCountries()
+   {
+      $this->db->query('SELECT * FROM Country');
+      $result = $this->db->resultSet();
+      return $result;
+   }
 
-    public function getCountries()
-    {
-        $this->db->query('SELECT * FROM Country');
-        return $this->db->resultSet();
-    }
+   public  function getSingleCountry($id)
+   {
+      $this->db->query("SELECT * FROM country WHERE Id = :Id");
+      $this->db->bind(':Id', $id, PDO::PARAM_INT);
+      return $this->db->single();
+   }
 
-    public function getCountry($id)
-    {
-        $this->db->query("SELECT * FROM Country WHERE Id = :id");
-        $this->db->bind(':id', $id, PDO::PARAM_INT);
-        return $this->db->single();
-    }
+   public function updateCountry($post)
+   {
+      $this->db->query("UPDATE `country`
+                         SET Name = :name,
+                             CapitalCity= :capitalCity,
+                             Continent = :continent,
+                             Population = :population
+                          WHERE Id = :id");
+      $this->db->bind(':name', $post["Name"], PDO::PARAM_STR);
+      $this->db->bind(':capitalCity', $post["CapitalCity"], PDO::PARAM_STR);
+      $this->db->bind(':continent', $post["Continent"], PDO::PARAM_STR);
+      $this->db->bind(':population', $post["Population"], PDO::PARAM_INT);
+      $this->db->bind(':id', $post["Id"], PDO::PARAM_INT);
 
-    public function updateCountry($data)
-    {
-        // var_dump($data);exit();
-        $this->db->query("UPDATE Country
-                          SET Name = :Name,
-                              CapitalCity = :CapitalCity,
-                              Continent = :Continent,
-                              Population = :Population
-                          WHERE Id = :Id");
+      return $this->db->execute();
+   }
 
-        $this->db->bind(':Name', $data['name'], PDO::PARAM_STR);
-        $this->db->bind(':CapitalCity', $data['capitalCity'], PDO::PARAM_STR);
-        $this->db->bind(':Continent', $data['continent'], PDO::PARAM_STR);
-        $this->db->bind(':Population', $data['population'], PDO::PARAM_INT);
-        $this->db->bind(':Id', $data['id'], PDO::PARAM_INT);
+   public function deleteCountry($id)
+   {
+      $this->db->query("DELETE FROM country WHERE Id = :id");
+      $this->db->bind(':id', $id, PDO::PARAM_INT);
+      return $this->db->execute();
+   }
 
-        return $this->db->execute();
-    }
+   public function createCountry($post)
+   {
+      $this->db->query("INSERT INTO `country` (`Id`, 
+                                               `Name`, 
+                                               `CapitalCity`, 
+                                               `Continent`, 
+                                               `Population`) 
+                        VALUES                (:id, 
+                                               :name, 
+                                               :capitalCity, 
+                                               :continent, 
+                                               :population)");
+      $this->db->bind(':name', $post["Name"], PDO::PARAM_STR);
+      $this->db->bind(':capitalCity', $post["CapitalCity"], PDO::PARAM_STR);
+      $this->db->bind(':continent', $post["Continent"], PDO::PARAM_STR);
+      $this->db->bind(':population', $post["Population"], PDO::PARAM_INT);
+      $this->db->bind(':id', NULL, PDO::PARAM_INT);
 
-    public function deleteCountry($id)
-    {
-        $this->db->query("DELETE FROM country WHERE Id = :id");
-        $this->db->bind(':id', $id, PDO::PARAM_INT);
-        return $this->db->execute();
-    }
-
-    public function createCountry($post)
-    {
-        $this->db->query("INSERT INTO country (Id, 
-                                               Name, 
-                                               CapitalCity, 
-                                               Continent, 
-                                               Population)
-                          VALUES              (:Id,
-                                               :Name,
-                                               :CapitalCity,
-                                               :Continent,
-                                               :Population)");
-        $this->db->bind(':Id', NULL, PDO::PARAM_NULL);
-        $this->db->bind(':Name', $post['name'], PDO::PARAM_STR);
-        $this->db->bind(':CapitalCity', $post['capitalCity'], PDO::PARAM_STR);
-        $this->db->bind(':Continent', $post['continent'], PDO::PARAM_STR);
-        $this->db->bind(':Population', $post['population'], PDO::PARAM_INT);
-        return $this->db->execute();
-
-    }
-
-
+      return $this->db->execute();
+   }
 }

@@ -1,108 +1,89 @@
 <?php
-
 class Countries extends Controller
 {
-    //properties
     private $countryModel;
-
-    // Dit is de constructor van de controller
-    public function __construct() 
+    public function __construct()
     {
-        $this->countryModel = $this->model('Country');
+       $this->countryModel =  $this->model('Country');
     }
 
-    public function index($land = 'Nederland', $age = 67)
+    public function index($land = null , $age = null)
     {
-        $records = $this->countryModel->getCountries();
-        //var_dump($records);
+      //laat de model de gegevens uit de database halen via method getCountries()
+       $records = $this->countryModel->getCountries();
 
-        $rows = '';
+       //var_dump($records);
+       $rows = '';
+       foreach($records as $value)
+       {
+          $rows .= "<tr>
+                      <td>$value->Name</td>
+                      <td>$value->CapitalCity</td>
+                      <td>$value->Continent</td>
+                      <td>$value->Population</td>
+                      <td><a href='" . URLROOT . "/countries/update/$value->Id'>update</a></td>
+                      <td><a href='" . URLROOT . "/countries/delete/$value->Id'>delete</a></td>
+                    </tr>";
+       }
 
-        foreach ($records as $items)
-        {
-            $rows .= "<tr>
-                        <td>$items->Id</td>
-                        <td>$items->Name</td>
-                        <td>$items->CapitalCity</td>
-                        <td>$items->Continent</td>
-                        <td>$items->Population</td>
-                        <td>
-                            <a href='" . URLROOT . "/countries/update/$items->Id'>update</a>
-                        </td>
-                        <td>
-                            <a href='" . URLROOT . "/countries/delete/$items->Id'>delete</a>
-                        </td>
-                      </tr>";
-        }
-
-        $data = [
-            'title' => "Overzicht landen",
-            'rows' => $rows
-        ];
-        $this->view('countries/index', $data);
+       
+       // Stuur de gegevens uit de model naar de view via het $data array
+       $data = [
+          'title' => "Landen van de wereld",
+          'rows' => $rows
+       ];
+       $this->view('countries/index', $data);
     }
 
-    public function update($id = null) 
+    public function update($id = null)
     {
-        /**
-         * Controleer of er gepost wordt vanuit de view update.php
-         */
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            /**
-             * Maak het $_POST array schoon
-             */
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+       //var_dump($id);exit();
+       // var_dump($_SERVER);exit();
 
-            $this->countryModel->updateCountry($_POST);
-
-            header("Location: " . URLROOT . "/country/index");
-        }
-
-        $record = $this->countryModel->getCountry($id);
-
-        $data = [
-            'title' => 'Update Landen',
-            'Id' => $record->Id,
-            'Name' => $record->Name,
-            'CapitalCity' => $record->CapitalCity,
-            'Continent' => $record->Continent,
-            'Population' => $record->Population
-        ]; 
-        $this->view('countries/update', $data);
+       if ($_SERVER["REQUEST_METHOD"] == "POST")
+       {
+          $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+          $this->countryModel->updateCountry($_POST);
+          header("Location: " . URLROOT . "/countries/index");
+       } else{
+         $row = $this->countryModel->getSingleCountry($id);
+       $data = [
+          'title' => '<h1>Update landenoverzicht</h1>',
+          'row' => $row
+       ];
+       $this->view("countries/update", $data);
+       }
+       
+       
     }
 
-    public function delete($id)
-    {
-        $result = $this->countryModel->deleteCountry($id);
-        if ($result) {
-            echo "Het record is verwijderd uit de database";
-            header("Refresh: 3; URL=" . URLROOT . "/countries/index");
-        } else {
-            echo "Internal servererror, het record is niet verwijderd";
-            header("Refresh: 3; URL=" . URLROOT . "/countries/index");
-        }
+    public function delete($id) {
+       //echo $id;exit();
+
+       $this->countryModel->deleteCountry($id);
+
+       $data = [
+          'deleteStatus' => "Het record met id = $id is verwijdert"
+       ];
+       $this->view("countries/delete", $data);
+       header("Refresh:2; url=" . URLROOT . "/countries/index");
     }
 
-    public function create()
-    {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // $_POST array schoonmaken
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    public function create() {
+       if ($_SERVER["REQUEST_METHOD"] == "POST") {
+          //var_dump($_POST);
+          $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $result = $this->countryModel->createCountry($_POST);
+          $this->countryModel->createCountry($_POST);
 
-            if ($result) {
-                echo "Het invoeren is gelukt";
-                header("Refresh:3; URL=" . URLROOT . "/countries/index");
-            } else {
-                echo "Het invoeren is NIET gelukt";
-                header("Refresh:3; URL=" . URLROOT . "/countries/index");
-            }
-        }
+          header("Location:" . URLROOT . "/countries/index");
+       } else{
+          
+       $data = [
+         'title' => "Voeg een nieuw land in"
+       ];
 
-        $data = [
-            'title' => 'Voeg een nieuw land toe'
-        ];
-        $this->view('countries/create', $data);
+       $this->view("countries/create", $data);
+      }
     }
 }

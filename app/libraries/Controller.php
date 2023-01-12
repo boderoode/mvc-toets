@@ -1,24 +1,22 @@
 <?php
-/**
- * Dit is de basecontroller waar alle nieuw te maken controllers van erven.
- */
+// De parent controllerclass laad de model en de view
 class Controller
 {
-    public function model($model)
-    {
-        // Pad naar modelclass bestand opgeven
-        require_once '../app/models/' . $model . '.php';
-
-        // Nieuw object van de model
-        return new $model();
-    }
-
-    public function view($view, $data = [])
-    {
-        if (file_exists('../app/views/' . $view . '.php')) {
-            require_once('../app/views/' . $view . '.php');
-        } else {
-            echo ('View bestaat niet');
-        }
-    }
+   public function model($model)
+   {
+     // Pad naar de modelclass bestand opgeven
+       require_once '../app/models/' . $model . '.php';
+     // Nieuwe object van de opgegeven model
+       return new $model();
+   }
+   public function view($view, $data = [])
+   {
+    
+      if(file_exists('../app/views/' . $view . '.php'))
+      {
+          require_once('../app/views/' . $view . '.php');
+      } else {
+        die('View bestaat niet');
+      }
+   }
 }

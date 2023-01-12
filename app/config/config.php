@@ -1,11 +1,15 @@
 <?php
-    define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-    define('DB_NAME', 'mvc-auto-toets');
+// Database constanten
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'mvc-2109b');
 
-    define('APPROOT', dirname(dirname(__FILE__)));
+// Het pad naar de app map
+define('APPROOT', dirname(dirname(__FILE__)));
 
-    define('URLROOT', 'http://mvc-pdo-toets-userstory.com/');
+// De URL van het de site
+define('URLROOT', 'http://mvc-oop-pdo-toets-userstory.com');
 
-    define('SITENAME', 'mvc-2109a');
+// Naam van de site
+define('SITENAME', 'MVC-Jaar2-p1');

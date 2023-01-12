@@ -2,12 +2,17 @@
 
 class Landingpages extends Controller
 {
+    public function __construct()
+    {
+        
+    }
+
     public function index()
     {
         $data = [
-            'title' => 'Homepage MVC',
-            'sayHello' => 'Hallo Allemaal'
-        ];
-        $this->view('landingpages/index', $data);
+            'title' => "Homepage MVC OOP Framework"
+         ];
+         $this->view('landingpages/index', $data);
+        
     }
 }
