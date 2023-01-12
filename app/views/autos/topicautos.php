@@ -13,5 +13,5 @@
 <br>
 
 <a href="<?= URLROOT; ?>/autos/addTopic/<?= $data['autoId']; ?>">
-    <input type="button" value="Onderwerp Toevoegen">
+    <input type="button" value="Auto toevoegen">
     </a>
