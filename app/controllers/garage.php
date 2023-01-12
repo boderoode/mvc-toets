@@ -1,6 +1,6 @@
 <?php
 
-class Wagenpark extends Controller
+class Garage extends Controller
 {
     private $AutoModel;
     public function __construct()
@@ -17,14 +17,14 @@ class Wagenpark extends Controller
            $rows .= "<tr> 
                      <td>$auto->Type</td>
                      <td>$auto->Kenteken</td>
-                     <td><a href='" . URLROOT . "/wagenpark/addKmStand{$auto->Id}'>Toevoegen</a></td>
+                     <td><a href='" . URLROOT . "/garage/addKmStand{$auto->Id}'>Toevoegen</a></td>
                      </tr>";
         }
         $data = [ 
-            'title' => "Overzicht Wagenpark",
+            'title' => "Overzicht Garage",
             'rows' => $rows
         ];
-        $this->view('wagenpark/index', $data);
+        $this->view('garage/index', $data);
     }
 
     public function addKmStand($Id = null)
@@ -34,6 +34,6 @@ class Wagenpark extends Controller
            'Id' => $Id,
         ];
         
-       $this->view('wagenpark/AddKmStand', $data);
+       $this->view('garage/AddKmStand', $data);
     }
 }

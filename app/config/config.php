@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'mvc-2109b');
+define('DB_NAME', 'mvc-2109-auto-toets');
 
 // Het pad naar de app map
 define('APPROOT', dirname(dirname(__FILE__)));
@@ -12,4 +12,4 @@ define('APPROOT', dirname(dirname(__FILE__)));
 define('URLROOT', 'http://mvc-oop-pdo-toets-userstory.com');
 
 // Naam van de site
-define('SITENAME', 'MVC-Jaar2-p1');
+define('SITENAME', 'MVC-auto-toets');
